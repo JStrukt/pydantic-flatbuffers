@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from fbs.parser import load
+from pydantic_flatbuffers.fbs.parser import load
+from .parser_cases import COMMENTS, CONSTANTS, INCLUDE, COLOR, MONSTER_TEST, THRIFT2FBS
 
 
 def test_comments():
-    load("tests/parser-cases/comments.fbs")
+    load(str(COMMENTS))
 
 
 def test_constants():
-    load("tests/parser-cases/constants.fbs")
+    load(str(CONSTANTS))
 
 
 def test_include():
-    load("tests/parser-cases/include.fbs", include_dirs=["./parser-cases"])
+    load(str(INCLUDE), include_dirs=["./parser_cases"])
 
 
 def test_color():
-    load("tests/parser-cases/color.fbs")
+    load(str(COLOR))
 
 
 def test_monsters():
-    fbs = load("tests/parser-cases/monster_test.fbs")
+    fbs = load(str(MONSTER_TEST))
     assert fbs.root == "Monster"
     assert fbs.file_extension == "mon"
     assert fbs.file_identifier == "MONS"
@@ -31,4 +32,4 @@ def test_monsters():
 
 
 def test_thrift2fbs():
-    load("tests/parser-cases/thrift2fbs.fbs")
+    load(str(THRIFT2FBS))

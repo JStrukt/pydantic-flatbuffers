@@ -25,7 +25,7 @@ pip3 install flattools
 Running
 
 ``` {.sourceCode .bash}
-$ ~/.local/bin/flatc tests/parser-cases/color.fbs --kotlin=1
+$ ~/.local/bin/flatc tests/parser_cases/color.fbs --kotlin=1
 ```
 
 Generates something like
