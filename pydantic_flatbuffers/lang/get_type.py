@@ -19,7 +19,7 @@ def get_type(name, module, primitive, optional=False, optionalize=None, listify=
             for t in module.__fbs_meta__[namespace]:
                 if t.__name__ == name:
                     return t.__name__
-        if name.startswith("["):
+        if (name[0], name[-1]) == ("[", "]"):
             element_type = get_type(
                 name[1:-1], module, module.FBSType._LOWER_NAMES_TO_VALUES
             )

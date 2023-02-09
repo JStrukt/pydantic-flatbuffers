@@ -20,7 +20,7 @@ def get_module_name(name, module):
 def parse_types(fbs_type, py_type) -> Tuple[bool, int, bool, Optional[FBSType], bool]:
     number_type = fbs_type in FBSType._NUMBER_TYPES
     bits = FBSType._BITS[fbs_type] if number_type else 0
-    if py_type.startswith("["):
+    if (py_type[0], py_type[-1]) == ("[", "]"):
         primitive_type = False
         element_type = py_type[1:-1]
         element_type_primitive = element_type in FBSType._PRIMITIVE_TYPES_NAMES
