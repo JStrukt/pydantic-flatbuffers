@@ -1,11 +1,4 @@
-from pydantic_flatbuffers.fbs.fbs import FBSType
-
-_NAMESPACE_TO_TYPE = {
-    "tables": FBSType.TABLE,
-    "structs": FBSType.STRUCT,
-    "enums": FBSType.ENUM,
-    "unions": FBSType.UNION,
-}
+from pydantic_flatbuffers.lang.enums import Namespaces
 
 
 def get_type(name, module, primitive, optional=False, optionalize=None, listify=None):
@@ -15,8 +8,8 @@ def get_type(name, module, primitive, optional=False, optionalize=None, listify=
             return optionalize(base)
         return base
     except KeyError:
-        for namespace in _NAMESPACE_TO_TYPE.keys():
-            for t in module.__fbs_meta__[namespace]:
+        for namespace in list(Namespaces):
+            for t in module.__fbs_meta__[namespace.title]:
                 if t.__name__ == name:
                     return t.__name__
         if (name[0], name[-1]) == ("[", "]"):

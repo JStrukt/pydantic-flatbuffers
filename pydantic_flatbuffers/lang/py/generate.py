@@ -8,7 +8,8 @@ from typing import List, Optional, Tuple
 
 from pydantic_flatbuffers.fbs.fbs import FBSType
 from pydantic_flatbuffers.lang.datastructure import FileToGenerate
-from pydantic_flatbuffers.lang.get_type import get_type, _NAMESPACE_TO_TYPE
+from pydantic_flatbuffers.lang.enums import Namespaces
+from pydantic_flatbuffers.lang.get_type import get_type
 from pydantic_flatbuffers.lang.common import (
     get_bases,
     get_module_name,
@@ -33,11 +34,11 @@ def c_int_from_fbs_type(fbs_type: FBSType) -> Optional[str]:
 def c_int_types(module) -> List:
     """Figure out what int types need to be imported from ctypes"""
     c_types = []
-    for namespace in _NAMESPACE_TO_TYPE.keys():
-        for t in module.__fbs_meta__[namespace]:
-            if namespace == "unions":
+    for namespace in list(Namespaces):
+        for t in module.__fbs_meta__[namespace.title]:
+            if namespace.title == "unions":
                 continue
-            if namespace == "enums":
+            if namespace.title == "enums":
                 py_type = c_int_from_fbs_type(t._FBSType)
                 if py_type:
                     c_types.append(py_type)

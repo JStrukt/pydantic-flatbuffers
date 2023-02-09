@@ -2,16 +2,16 @@ from collections import OrderedDict
 from pydantic_flatbuffers.fbs.fbs import FBSType
 from typing import List, NewType, Optional, Tuple
 
-from pydantic_flatbuffers.lang.get_type import _NAMESPACE_TO_TYPE
+from pydantic_flatbuffers.lang.enums import Namespaces
 
 
 Table = NewType("Table", OrderedDict)
 
 
 def get_module_name(name, module):
-    for namespace in _NAMESPACE_TO_TYPE.keys():
+    for namespace in list(Namespaces):
         for mod in [module] + module.__fbs_meta__["includes"]:
-            for t in mod.__fbs_meta__[namespace]:
+            for t in mod.__fbs_meta__[namespace.title]:
                 if t.__name__ == name:
                     return t.__module__
     return None
@@ -34,11 +34,11 @@ def parse_types(fbs_type, py_type) -> Tuple[bool, int, bool, Optional[FBSType], 
 def lookup_fbs_type(module, fbs_type) -> Optional[FBSType]:
     """For complex types, check if something is a struct,
     table, union or an enum"""
-    for namespace in _NAMESPACE_TO_TYPE.keys():
+    for namespace in list(Namespaces):
         for mod in [module] + module.__fbs_meta__["includes"]:
-            for t in mod.__fbs_meta__[namespace]:
+            for t in mod.__fbs_meta__[namespace.title]:
                 if t.__name__ == fbs_type:
-                    return _NAMESPACE_TO_TYPE[namespace]
+                    return namespace.index
     return None
 
 
