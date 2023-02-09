@@ -1,8 +1,7 @@
-from . import bin, fbs, flattools, lang
+from . import bin, fbs, lang
 
 __all__ = [
     "bin",
     "fbs",
-    "flattools",
     "lang",
 ]

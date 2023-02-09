@@ -12,9 +12,10 @@ import sys
 import types
 
 from ply import lex, yacc
+from urllib.request import urlopen, urlparse
 
-from pydantic_flatbuffers.fbs._compat import urlopen, urlparse
 from pydantic_flatbuffers.fbs.fbs import FBSPayload, FBSType, gen_init
+from pydantic_flatbuffers.lang.enums import FBSTypes
 
 from .exc import FbsGrammerError, FbsParserError
 from .lexer import *  # noqa
@@ -264,31 +265,31 @@ def p_simple_base_type(p):  # noqa
     | STRING"""
     # TODO: make this less verbose and handle all types
     if p[1].upper() == "BOOL":
-        p[0] = FBSType.BOOL
+        p[0] = FBSTypes.BOOL.index
     elif p[1].upper() == "BYTE":
-        p[0] = FBSType.BYTE
+        p[0] = FBSTypes.BYTE.index
     elif p[1].upper() == "UBYTE":
-        p[0] = FBSType.UBYTE
+        p[0] = FBSTypes.UBYTE.index
     elif p[1].upper() == "SHORT":
-        p[0] = FBSType.SHORT
+        p[0] = FBSTypes.SHORT.index
     elif p[1].upper() == "USHORT":
-        p[0] = FBSType.USHORT
+        p[0] = FBSTypes.USHORT.index
     elif p[1].upper() == "INT":
-        p[0] = FBSType.INT
+        p[0] = FBSTypes.INT.index
     elif p[1].upper() == "UINT":
-        p[0] = FBSType.UINT
+        p[0] = FBSTypes.UINT.index
     elif p[1].upper() == "LONG":
-        p[0] = FBSType.LONG
+        p[0] = FBSTypes.LONG.index
     elif p[1].upper() == "ULONG":
-        p[0] = FBSType.ULONG
+        p[0] = FBSTypes.ULONG.index
     elif p[1].upper() == "FLOAT":
-        p[0] = FBSType.FLOAT
+        p[0] = FBSTypes.FLOAT.index
     elif p[1].upper() == "DOUBLE":
-        p[0] = FBSType.DOUBLE
+        p[0] = FBSTypes.DOUBLE.index
     elif p[1].upper() == "STRING":
-        p[0] = FBSType.STRING
+        p[0] = FBSTypes.STRING.index
     else:
-        p[0] = FBSType.STRUCT
+        p[0] = FBSTypes.STRUCT.index
 
 
 def p_scalar(p):
@@ -310,7 +311,7 @@ def sort_members(fbs):
         fbs.__fbs_meta__[member] = sorted(fbs.__fbs_meta__[member])
 
 
-def parse(
+def parse(  # noqa: C901
     path,
     module_name=None,
     include_dirs=None,

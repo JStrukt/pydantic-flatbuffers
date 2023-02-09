@@ -5,7 +5,7 @@ from ctypes import (
     c_int16 as int16,
     c_int8 as int8,
 )
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 from typing import Protocol
 
 from enum import Enum

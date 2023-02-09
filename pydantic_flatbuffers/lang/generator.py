@@ -1,12 +1,14 @@
 from jinja2 import Environment, FileSystemLoader
 from pydantic_flatbuffers.lang.datastructure import FileToGenerate
+from typeguard import typechecked
 
 
 def format_list(flist, pattern):
     return [pattern % s for s in flist]
 
 
-def generate_files(*files_to_generate: FileToGenerate):
+@typechecked
+def generate_files(*files_to_generate: FileToGenerate) -> None:
     for file_to_generate in files_to_generate:
         with open(file_to_generate.filename, "w") as target:
             env = Environment(

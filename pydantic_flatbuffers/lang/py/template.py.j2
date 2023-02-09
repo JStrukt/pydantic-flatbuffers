@@ -9,7 +9,7 @@ from ctypes import (
 {% if cint_types|length %}
 )
 {% endif %}
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 from typing import Protocol
 {{imports}}
 {% if __fbs_meta__.enums|length %}

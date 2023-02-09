@@ -41,11 +41,3 @@ class FBSPyType(FBSType):
         FBSType.VECTOR: "int",
         FBSType.ENUM: "int",
     }
-
-
-def optionalize(primitive: str):
-    return f"Option[{primitive}]"
-
-
-def listify(primitive: str):
-    return f"List[{primitive}]"
