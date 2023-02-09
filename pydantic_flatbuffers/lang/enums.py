@@ -1,5 +1,7 @@
-from typing import List
+import re
+from typing import List, Optional
 from matrix_enum import MatrixEnum, Member
+from typeguard import typechecked
 from pydantic_flatbuffers.fbs.fbs import FBSType
 
 
@@ -142,6 +144,13 @@ class FBSTypes(MatrixEnum):
         pytype="interface",
         pyctype="int",
     )
+
+    @typechecked
+    def get_c_int_type(self) -> Optional[str]:
+        if self.primitive:
+            if re.search(r"int\d", self.pytype):
+                return self.pytype
+        return None
 
 
 NUMBERS: List[FBSType] = [fbs_type for fbs_type in list(FBSTypes) if fbs_type.number]

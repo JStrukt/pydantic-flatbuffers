@@ -19,10 +19,6 @@ def main():
     parser.add_argument(
         "--python", type=bool, default=False, help="Generate Python code"
     )
-    # TODO: pass args.sort to parser
-    parser.add_argument(
-        "--sort", type=bool, default=False, help="Sort everything alphabetically"
-    )
     args, rest = parser.parse_known_args()
     for filename in rest:
         if args.python:

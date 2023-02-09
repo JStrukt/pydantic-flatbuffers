@@ -1,10 +1,9 @@
 import os
 from pathlib import Path
-import re
 from functools import partial
 from keyword import kwlist
 from types import ModuleType
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from typeguard import typechecked
 
@@ -26,16 +25,6 @@ TEMPLATE: Path = HERE / "template.py.j2"
 
 
 @typechecked
-def c_int_from_fbs_type(fbs_type: FBSTypes) -> Optional[str]:
-    primitive = fbs_type.primitive
-    if primitive:
-        py_type = fbs_type.pytype
-        if re.search(r"int\d", py_type):
-            return py_type
-    return None
-
-
-@typechecked
 def c_int_types(module: ModuleType) -> List:  # noqa: C901
     """Figure out what int types need to be imported from ctypes"""
     c_types = []
@@ -54,7 +43,7 @@ def c_int_types(module: ModuleType) -> List:  # noqa: C901
                         real_type: FBSTypes = FBSTypes(fbs_type)
                     except ValueError:
                         continue
-                    py_type = c_int_from_fbs_type(real_type)
+                    py_type = real_type.get_c_int_type()
                     if py_type:
                         c_types.append(py_type)
                     continue
@@ -65,7 +54,7 @@ def c_int_types(module: ModuleType) -> List:  # noqa: C901
                         real_type: FBSTypes = FBSTypes(fbs_type)
                     except ValueError:
                         continue
-                    py_type = c_int_from_fbs_type(real_type)
+                    py_type = real_type.get_c_int_type()
                     if py_type:
                         c_types.append(py_type)
     return c_types
@@ -168,7 +157,6 @@ def generate(
     # Python specific
     setattr(tree, "py_gen_type", py_gen_type)
     setattr(tree, "py_gen_method", py_gen_method)
-    setattr(tree, "py_gen_getter", py_gen_getter)
     if not separate:
         _, filename = os.path.split(path)
         py_filename = os.path.splitext(filename)[0] + ".py"
